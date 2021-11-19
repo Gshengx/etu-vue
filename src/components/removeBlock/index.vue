@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     init() {
-      this.result = false
+      this.reset()
       let block = Math.round(Math.random() * 10)
       this.block = block > 2 ? block : 3
       let initAnima = JSON.parse(JSON.stringify(this.animate))
@@ -88,9 +88,21 @@ export default {
       }
       this.initArr = arr
     },
+    reset() {
+      this.result = false
+      this.click.x = null
+      this.click.y = null
+      this.score = 0
+    },
     handleClick(x, y) {
+      console.log('old', this.click.x, this.click.y)
+      console.log('new', x, y)
       if (this.click.x) {
-        if (this.click.x === x && this.click.y === y) return
+        if (this.click.x === x && this.click.y === y) {
+          this.click.x = null
+          this.click.y = null
+          return
+        }
         let old = this.initArr[this.click.x][this.click.y]
         this.initArr[this.click.x][this.click.y] = this.initArr[x][y]
         this.initArr[x][y] = old
@@ -179,7 +191,9 @@ export default {
       this.initArr = tArr
 
       if (hasRemove) {
-        this.getRemove()
+        setTimeout(() => {
+          this.getRemove()
+        }, 500)
         return
       }
       // 得分
